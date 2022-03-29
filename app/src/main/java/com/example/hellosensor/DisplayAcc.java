@@ -1,6 +1,5 @@
 package com.example.hellosensor;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Context;
@@ -16,9 +15,9 @@ public class DisplayAcc extends AppCompatActivity implements SensorEventListener
     private SensorManager sensorManager;
     private Sensor accelerometer;
 
-    private float deltaX = 0;
-    private float deltaY = 0;
-    private float deltaZ = 0;
+    private float lastX, lastY, lastZ;
+
+    private float deltaX, deltaY, deltaZ;
 
     private float vibrateThreshold = 0;
 
@@ -30,7 +29,10 @@ public class DisplayAcc extends AppCompatActivity implements SensorEventListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_acc);
-        initializeViews();
+
+        currentX = (TextView) findViewById(R.id.currentX);
+        currentY = (TextView) findViewById(R.id.currentY);
+        currentZ = (TextView) findViewById(R.id.currentZ);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
@@ -46,12 +48,6 @@ public class DisplayAcc extends AppCompatActivity implements SensorEventListener
         //initialize vibration
         v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 
-    }
-
-    public void initializeViews() {
-        currentX = (TextView) findViewById(R.id.currentX);
-        currentY = (TextView) findViewById(R.id.currentY);
-        currentZ = (TextView) findViewById(R.id.currentZ);
     }
 
     //onResume() register the accelerometer for listening the events
@@ -74,26 +70,45 @@ public class DisplayAcc extends AppCompatActivity implements SensorEventListener
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        // clean current values
-        displayCleanValues();
+        //displayCleanValues();
         // display the current x,y,z accelerometer values
         displayCurrentValues();
+
+
+        // get the change of the x,y,z values of the accelerometer
+        deltaX = Math.abs(lastX - event.values[0]);
+        deltaY = Math.abs(lastY - event.values[1]);
+        deltaZ = Math.abs(lastZ - event.values[2]);
 
         // if the change is below 2, it is just plain noise
         if (deltaX < 2)
             deltaX = 0;
         if (deltaY < 2)
             deltaY = 0;
-        if ((deltaX >  vibrateThreshold) || (deltaY > vibrateThreshold) || (deltaZ > vibrateThreshold)) {
+        if (deltaZ < 2)
+            deltaZ = 0;
+
+        // set the last know values of x,y,z
+        lastX = event.values[0];
+        lastY = event.values[1];
+        lastZ = event.values[2];
+
+        vibrate();
+    }
+    // if the change in the accelerometer value is big enough, then vibrate!
+// our threshold is MaxValue/2
+    public void vibrate() {
+        if ((deltaX > vibrateThreshold) || (deltaY > vibrateThreshold) || (deltaZ > vibrateThreshold)) {
             v.vibrate(50);
         }
     }
 
-    public void displayCleanValues() {
+
+    /*public void displayCleanValues() {
         currentX.setText("0.0");
         currentY.setText("0.0");
         currentZ.setText("0.0");
-    }
+    }*/
 
     // display the current x,y,z accelerometer values
     public void displayCurrentValues() {
