@@ -44,13 +44,13 @@ public class DisplayCompass extends AppCompatActivity implements SensorEventList
     protected void onResume() {
         super.onResume();
         // code for system's orientation sensor registered listeners
-        SensorManage.registerListener(this, SensorManage.getDefaultSensor(Sensor.TYPE_ORIENTATION),
+        SensorManage.registerListener(this, SensorManage.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
                 SensorManager.SENSOR_DELAY_GAME);
     }
     @Override
     public void onSensorChanged(SensorEvent event) {
         // get angle around the z-axis rotated
-        float degree = Math.round(event.values[0]);
+        float degree = Math.round(event.values[0])*10;
         DegreeTV.setText("Heading: " + Float.toString(degree) + " degrees");
         // rotation animation - reverse turn degree degrees
         RotateAnimation ra = new RotateAnimation(

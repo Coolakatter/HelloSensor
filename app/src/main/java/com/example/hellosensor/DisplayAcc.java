@@ -16,9 +16,7 @@ public class DisplayAcc extends AppCompatActivity implements SensorEventListener
     private Sensor accelerometer;
 
     private float lastX, lastY, lastZ;
-
     private float deltaX, deltaY, deltaZ;
-
     private float vibrateThreshold = 0;
 
     private TextView currentX, currentY, currentZ;
@@ -70,9 +68,10 @@ public class DisplayAcc extends AppCompatActivity implements SensorEventListener
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        //displayCleanValues();
-        // display the current x,y,z accelerometer values
-        displayCurrentValues();
+        //display the current x,y,z accelerometer values
+        currentX.setText(String.format("%.3f", event.values[0]));
+        currentY.setText(String.format("%.3f", event.values[1]));
+        currentZ.setText(String.format("%.3f", event.values[2]));
 
 
         // get the change of the x,y,z values of the accelerometer
@@ -103,17 +102,4 @@ public class DisplayAcc extends AppCompatActivity implements SensorEventListener
         }
     }
 
-
-    /*public void displayCleanValues() {
-        currentX.setText("0.0");
-        currentY.setText("0.0");
-        currentZ.setText("0.0");
-    }*/
-
-    // display the current x,y,z accelerometer values
-    public void displayCurrentValues() {
-        currentX.setText(Float.toString(deltaX));
-        currentY.setText(Float.toString(deltaY));
-        currentZ.setText(Float.toString(deltaZ));
-    }
 }
