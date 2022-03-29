@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DisplayCompass">
+
+    <TextView
+        android:id="@+id/DegreeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="134dp"
+        android:layout_marginTop="157dp"
+        android:layout_marginEnd="134dp"
+        android:layout_marginBottom="8dp"
+        android:text="Heading: 0.0"
+        android:textSize="25sp"
+        android:textStyle="normal|bold"
+        app:layout_constraintBottom_toTopOf="@+id/compass_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/compass_image"
+        android:layout_width="181dp"
+        android:layout_height="185dp"
+        android:layout_below="@+id/DegreeTV"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="77dp"
+        android:layout_marginTop="135dp"
+        android:layout_marginEnd="77dp"
+        android:layout_marginBottom="220dp"
+        android:src="@drawable/compass"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DegreeTV" />
+
+</android.support.constraint.ConstraintLayout>
