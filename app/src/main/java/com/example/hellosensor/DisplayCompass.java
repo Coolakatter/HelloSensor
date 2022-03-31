@@ -1,6 +1,7 @@
 package com.example.hellosensor;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
@@ -44,14 +45,14 @@ public class DisplayCompass extends AppCompatActivity implements SensorEventList
     protected void onResume() {
         super.onResume();
         // code for system's orientation sensor registered listeners
-        SensorManage.registerListener(this, SensorManage.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
+        SensorManage.registerListener(this, SensorManage.getDefaultSensor(Sensor.TYPE_ORIENTATION),
                 SensorManager.SENSOR_DELAY_GAME);
     }
     @Override
     public void onSensorChanged(SensorEvent event) {
         // get angle around the z-axis rotated
-        float degree = Math.round(event.values[0])*10;
-        DegreeTV.setText("Heading: " + Float.toString(degree) + " degrees");
+        float degree = Math.round(event.values[0]);
+        DegreeTV.setText("Heading: " + Float.toString(degree) + " °");
         // rotation animation - reverse turn degree degrees
         RotateAnimation ra = new RotateAnimation(
                 DegreeStart,
@@ -65,6 +66,12 @@ public class DisplayCompass extends AppCompatActivity implements SensorEventList
         // Start animation of compass image
         compassImage.startAnimation(ra);
         DegreeStart = -degree;
+
+        if(degree == 345 || degree == -15){
+            DegreeTV.setTextColor(Color.parseColor("#FF6347"));
+        } else{
+            DegreeTV.setTextColor(Color.parseColor("#000000"));
+        }
     }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

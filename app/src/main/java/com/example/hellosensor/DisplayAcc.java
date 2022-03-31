@@ -17,7 +17,7 @@ public class DisplayAcc extends AppCompatActivity implements SensorEventListener
 
     private float lastX, lastY, lastZ;
     private float deltaX, deltaY, deltaZ;
-    private float vibrateThreshold = 0;
+    private float vibrateThreshold = 20;
 
     private TextView currentX, currentY, currentZ;
 
@@ -38,7 +38,7 @@ public class DisplayAcc extends AppCompatActivity implements SensorEventListener
 
             accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-            vibrateThreshold = accelerometer.getMaximumRange() / 2;
+
         } else {
             // fail! we don't have an accelerometer!
         }
@@ -78,14 +78,6 @@ public class DisplayAcc extends AppCompatActivity implements SensorEventListener
         deltaX = Math.abs(lastX - event.values[0]);
         deltaY = Math.abs(lastY - event.values[1]);
         deltaZ = Math.abs(lastZ - event.values[2]);
-
-        // if the change is below 2, it is just plain noise
-        if (deltaX < 2)
-            deltaX = 0;
-        if (deltaY < 2)
-            deltaY = 0;
-        if (deltaZ < 2)
-            deltaZ = 0;
 
         // set the last know values of x,y,z
         lastX = event.values[0];
