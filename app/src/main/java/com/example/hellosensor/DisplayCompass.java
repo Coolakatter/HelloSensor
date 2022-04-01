@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -22,6 +23,9 @@ public class DisplayCompass extends AppCompatActivity implements SensorEventList
     // record the angle turned of the compass picture
     private float DegreeStart = 0f;
 
+    private MediaPlayer sound;
+    boolean playing = false;
+
     TextView DegreeTV;
 
     @Override
@@ -34,6 +38,7 @@ public class DisplayCompass extends AppCompatActivity implements SensorEventList
         DegreeTV = (TextView) findViewById(R.id.DegreeTV);
         // initialize your android device sensor capabilities
         SensorManage = (SensorManager) getSystemService(SENSOR_SERVICE);
+
     }
     @Override
     protected void onPause() {
@@ -52,6 +57,7 @@ public class DisplayCompass extends AppCompatActivity implements SensorEventList
     public void onSensorChanged(SensorEvent event) {
         // get angle around the z-axis rotated
         float degree = Math.round(event.values[0]);
+
         DegreeTV.setText("Heading: " + Float.toString(degree) + " °");
         // rotation animation - reverse turn degree degrees
         RotateAnimation ra = new RotateAnimation(
@@ -67,12 +73,27 @@ public class DisplayCompass extends AppCompatActivity implements SensorEventList
         compassImage.startAnimation(ra);
         DegreeStart = -degree;
 
-        if(degree == 345 || degree == -15){
+        if(degree<=15 || degree>=345){
             DegreeTV.setTextColor(Color.parseColor("#FF6347"));
         } else{
             DegreeTV.setTextColor(Color.parseColor("#000000"));
         }
+
+        if(degree>=259 && degree<=281) {
+            if (!playing) {
+                sound = MediaPlayer.create(this, R.raw.go_west);
+                sound.start();
+                playing = true;
+            }
+        } else {
+            if(playing) {
+                sound.stop();
+                playing = false;
+            }
+        }
+
     }
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // not in use
