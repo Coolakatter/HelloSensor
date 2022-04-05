@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    /** Called when the user taps the Send button */
     public void accPage(View view) {
         Intent intent = new Intent(this, DisplayAcc.class);
         startActivity(intent);
